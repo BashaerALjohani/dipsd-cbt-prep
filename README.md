@@ -10,3 +10,6 @@ A bilingual (English / Arabic) study site for the DIPSD mock CBT, covering Units
 - Pink and magic designs
 
 Open `index.html` in a browser, or use the GitHub Pages link. Progress is saved in the browser on each device.
+
+## GA Workshop
+A separate page that guides each graded assignment (Units 18–28) task by task: what is required, what it means, steps, screenshots to collect, and what an A needs. You do the work yourself.

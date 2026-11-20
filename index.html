@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="CBT Prep">
 <meta name="description" content="Bilingual (English/Arabic) study site for the DIPSD mock CBT.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23D3367A'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white'%3E%E2%9C%BF%3C/text%3E%3C/svg%3E">
-<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}[data-ask]{display:none!important}</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}[data-ask],[data-ask-ga]{display:none!important}</style>
 </head>
 <body>
 <title>DIPSD CBT Prep</title>
@@ -408,6 +408,36 @@ main{padding-block:22px 60px;display:flex;flex-direction:column;gap:20px}
 .lsnbar i.d{background:var(--accent2)} .lsnbar i.c{background:var(--accent)}
 .lsnnav{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .conf{display:flex;gap:8px;flex-wrap:wrap}
+
+/* GA workshop (separate page) */
+body.ga-mode #tabs{display:none}
+.gahead{display:flex;gap:8px;flex-wrap:wrap}
+.gahow{margin:0;padding-inline-start:20px}
+.gahow li{margin-bottom:6px}
+.galayout{display:grid;grid-template-columns:minmax(220px,280px) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:760px){.galayout{grid-template-columns:1fr}}
+.galist{display:flex;flex-direction:column;gap:6px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px)}
+@media (max-width:760px){.galist{position:static;flex-direction:row;overflow-x:auto;padding-bottom:4px}.galist button{min-width:210px}}
+.galist button{display:flex;gap:10px;align-items:flex-start;text-align:start;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:9px 11px;cursor:pointer;color:var(--ink)}
+.galist button.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.galist .tx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.gs{width:12px;height:12px;border-radius:50%;flex:none;margin-top:5px;border:2px solid var(--line);background:var(--surface)}
+.gs1{background:var(--lv3);border-color:var(--lv3)} .gs2{background:var(--lv2);border-color:var(--lv2)} .gs3{background:var(--ok);border-color:var(--ok)}
+.gatask{gap:16px}
+.gasec{display:flex;flex-direction:column;gap:8px}
+.gasec h3{font-size:.98rem}
+.gasec ul{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:6px}
+.gasteps{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:10px}
+.gasteps label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.gasteps input{margin-top:6px;accent-color:var(--accent);width:17px;height:17px;flex:none}
+.gasteps .num{font-family:var(--f-mono);color:var(--accent);font-weight:600;min-width:18px;margin-top:2px}
+.gasteps li.ck .bi{opacity:.55}
+.ga-a{background:var(--lv1s);border-radius:12px;padding:12px 14px}
+.gasend{background:var(--accent-soft);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.msg{font-family:var(--f-mono);font-size:.82rem;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;flex:1;min-width:0;white-space:normal;word-break:break-word}
+.gadet summary{cursor:pointer;font-weight:600;color:var(--accent)}
+.gadet[open] summary{margin-bottom:10px}
+.gadet ul{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:6px}
 footer{color:var(--muted);font-size:.8rem;padding-block:0 30px}
 </style>
 
@@ -440,6 +470,16 @@ footer{color:var(--muted);font-size:.8rem;padding-block:0 30px}
 <script src="data/u27.js" charset="utf-8"></script>
 <script src="data/acts1.js" charset="utf-8"></script>
 <script src="data/acts2.js" charset="utf-8"></script>
+<script src="data/ga18.js" charset="utf-8"></script>
+<script src="data/ga19.js" charset="utf-8"></script>
+<script src="data/ga20.js" charset="utf-8"></script>
+<script src="data/ga21.js" charset="utf-8"></script>
+<script src="data/ga22.js" charset="utf-8"></script>
+<script src="data/ga23.js" charset="utf-8"></script>
+<script src="data/ga24.js" charset="utf-8"></script>
+<script src="data/ga26.js" charset="utf-8"></script>
+<script src="data/ga27.js" charset="utf-8"></script>
+<script src="data/ga28.js" charset="utf-8"></script>
 <script>
 (function () {
 'use strict';
@@ -456,10 +496,14 @@ const ALLQ = []; U.forEach(u => u.quiz.forEach((q, i) => ALLQ.push({ key: u.id +
 const ACTS = (window.STUDY && window.STUDY.acts) || {};
 const actsOf = u => (ACTS[u.id] || []).map((a, i) => ({ a, i, key: u.id + '-a' + i }));
 const actsFor = (u, ti) => actsOf(u).filter(x => x.a.ti === ti);
+const GAD = (window.STUDY && window.STUDY.ga) || {};
+const GAU = Object.keys(GAD).map(id => Object.assign({ id }, GAD[id])).sort((a, b) => a.num - b.num);
+const gaKey = (g, i) => g.id + '-g' + i;
+const gaProg = g => ({ n: g.tasks.length, d: g.tasks.filter((_, i) => S.gaSt[gaKey(g, i)] === 3).length });
 
 /* ---------------- state ---------------- */
 const LSK = 'dipsd-cbt-prep-v1';
-const DEF = { v: 2, updatedAt: 0, start: '', examDate: '', lang: 'both', skin: 'rose', fc: {}, qs: {}, tp: {}, plan: {}, mis: {}, focus: {}, sessions: {}, act: {}, exams: [], xp: 0, badges: {}, notes: {}, qod: {}, best: {}, seen: {}, les: {}, actDone: {}, conf: {}, lessonDone: {} };
+const DEF = { v: 2, updatedAt: 0, start: '', examDate: '', lang: 'both', skin: 'rose', fc: {}, qs: {}, tp: {}, plan: {}, mis: {}, focus: {}, sessions: {}, act: {}, exams: [], xp: 0, badges: {}, notes: {}, qod: {}, best: {}, seen: {}, les: {}, actDone: {}, conf: {}, lessonDone: {}, gaStep: {}, gaSt: {}, gaChk: {}, gaNote: {} };
 function fresh(o) {
   const s = JSON.parse(JSON.stringify(DEF));
   if (o && typeof o === 'object') for (const k in DEF) {
@@ -593,6 +637,8 @@ const BADGES = [
   { id: 'lesson', ic: '📘', en: 'Finished an interactive lesson', ar: 'أنهيت درس تفاعلي', ok: () => Object.keys(S.lessonDone).length >= 1 },
   { id: 'acts10', ic: '🧩', en: '10 hands-on activities solved', ar: 'حليت 10 أنشطة تطبيقية', ok: () => Object.keys(S.actDone).length >= 10 },
   { id: 'acts40', ic: '🏅', en: '40 hands-on activities solved', ar: 'حليت 40 نشاط تطبيقي', ok: () => Object.keys(S.actDone).length >= 40 },
+  { id: 'ga1', ic: '📂', en: 'First assignment task done', ar: 'أول تاسك أسايمنت خلص', ok: () => Object.values(S.gaSt).some(v => v === 3) },
+  { id: 'gafull', ic: '🎓', en: 'A whole assignment done', ar: 'أسايمنت كامل خلص', ok: () => GAU.some(g => g.tasks.every((_, i) => S.gaSt[gaKey(g, i)] === 3)) },
   { id: 's3', ic: '🔥', en: '3-day streak', ar: '3 أيام متتالية', ok: () => streak() >= 3 },
   { id: 's7', ic: '⚡', en: '7-day streak', ar: '7 أيام متتالية', ok: () => streak() >= 7 },
   { id: 'f4', ic: '⏳', en: '4 focus sessions', ar: '4 جلسات تركيز', ok: () => sumv(S.sessions) >= 4 },
@@ -696,11 +742,12 @@ const PLAN = [
 const UT = { tab: 'overview', kwL: 0, lvF: 0, pmode: 'cards', plevel: 0 };
 const P = { scope: 'all', mode: 'cards', level: 0 };
 let keyHandler = null;
-const TABS = [['home', 'Home', 'الرئيسية'], ['plan', 'Plan', 'الخطة'], ['units', 'Units', 'الوحدات'], ['practice', 'Practice', 'تدريب'], ['exam', 'Mock CBT', 'اختبار تجريبي'], ['mistakes', 'Mistakes', 'الأخطاء'], ['revision', 'Revision', 'مراجعة سريعة'], ['rewards', 'Rewards', 'الإنجازات'], ['timer', 'Timer', 'المؤقت']];
+const TABS = [['home', 'Home', 'الرئيسية'], ['plan', 'Plan', 'الخطة'], ['units', 'Units', 'الوحدات'], ['practice', 'Practice', 'تدريب'], ['exam', 'Mock CBT', 'اختبار تجريبي'], ['mistakes', 'Mistakes', 'الأخطاء'], ['revision', 'Revision', 'مراجعة سريعة'], ['rewards', 'Rewards', 'الإنجازات'], ['timer', 'Timer', 'المؤقت'], ['ga', '📂 GA Workshop', '📂 ورشة الأسايمنتات']];
 const route = () => (location.hash || '#home').slice(1) || 'home';
 
 function chrome() {
   const r = route(), mc = misCount();
+  document.body.classList.toggle('ga-mode', r === 'ga' || r.indexOf('ga-') === 0);
   $('#tabs').innerHTML = TABS.map(t => '<a href="#' + t[0] + '" class="' + (r === t[0] || (t[0] === 'units' && UB[r]) ? 'on' : '') + '">' + L(t[1], t[2]) + (t[0] === 'mistakes' && mc ? '<span class="cnt">' + mc + '</span>' : '') + '</a>').join('');
   document.querySelectorAll('[data-lang]').forEach(b => b.classList.toggle('on', b.dataset.lang === S.lang));
   const sb = $('#skinBtn');
@@ -727,6 +774,8 @@ function render(scroll) {
   else if (r === 'revision') v.innerHTML = viewRevision();
   else if (r === 'rewards') v.innerHTML = viewRewards();
   else if (r === 'timer') v.innerHTML = viewTimer();
+  else if (r === 'ga') v.innerHTML = viewGAHome();
+  else if (r.indexOf('ga-') === 0 && GAD[r.slice(3)]) v.innerHTML = viewGA(GAU.find(g => g.id === r.slice(3)));
   else v.innerHTML = viewHome();
   after(r);
   $('#foot').innerHTML = '<p>' + L('Built from your Unit 18–27 slides, worksheets and the unit specification. Practice questions are written in the style of the CBT; they are not official exam questions.', 'مبني من سلايدات الوحدات 18 إلى 27 وأوراق العمل ومواصفات الوحدة. الأسئلة تدريبية بأسلوب الاختبار، وليست أسئلة رسمية.') + '</p>';
@@ -770,7 +819,7 @@ function viewHome() {
       <h1>${L(day.t.en, day.t.ar)}</h1>
       <p class="quote">“${L(mot[0], mot[1])}”</p>
       <p class="muted small">${L(doneN + ' of ' + day.k.length + ' tasks done today', 'أنجزت ' + doneN + ' من ' + day.k.length + ' مهام اليوم')}</p>
-      <div class="row">${vidTask ? `<button class="btn" data-go="${vidTask.u}:video">▶ ${L("Today's lesson clip", 'مقطع اليوم')}</button>` : ''}<a class="btn ${vidTask ? 'ghost' : ''}" href="#plan">${L("Open today's plan", 'افتح خطة اليوم')}</a></div>
+      <div class="row">${vidTask ? `<button class="btn" data-go="${vidTask.u}:video">▶ ${L("Today's lesson clip", 'مقطع اليوم')}</button>` : ''}<a class="btn ${vidTask ? 'ghost' : ''}" href="#plan">${L("Open today's plan", 'افتح خطة اليوم')}</a><a class="btn ghost" href="#ga">📂 ${L('GA Workshop', 'ورشة الأسايمنتات')}</a></div>
     </div>
     <div class="ring" aria-label="Readiness ${overall}%">
       <svg width="132" height="132" viewBox="0 0 132 132"><circle cx="66" cy="66" r="56" fill="none" stroke="var(--surface2)" stroke-width="12"/><circle cx="66" cy="66" r="56" fill="none" stroke="var(--lv${lab.c})" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - overall / 100)}"/></svg>
@@ -1093,6 +1142,68 @@ function vPlay() { if (VID.ended) { VID.ended = false; VID.si = 0; VID.li = 0; }
 function vPause() { VID.tok++; VID.playing = false; vStopAudio(); vDraw(); }
 function vGo(si) { const was = VID.playing; VID.tok++; VID.playing = false; vStopAudio(); VID.si = Math.max(0, Math.min(VID.slides.length - 1, si)); VID.li = 0; VID.ended = false; vDraw(); if (was) vRun(); }
 function clipDone() { const k = VID.u + '_done'; if (!S.seen[k]) { S.seen[k] = todayKey(); addXP(40); } persist(); confetti(); toast(T2('Lesson clip finished! Now try the flashcards.', 'خلصت المقطع! جرّب البطاقات الحين.')); }
+
+/* ---------------- GA workshop ---------------- */
+const GST = [['Not started', 'ما بدأت'], ['In progress', 'أشتغل عليه'], ['Sent to Claude', 'أرسلته لـ Claude'], ['Done', 'خلصته']];
+function viewGAHome() {
+  return `<section class="gahead"><a href="#home" class="btn quiet">← ${L('Back to the study site', 'رجوع لموقع المذاكرة')}</a></section>
+  <section class="card hero"><div class="stack">
+    <span class="eyebrow">📂 ${L('GA Workshop', 'ورشة الأسايمنتات')}</span>
+    <h1>${L('Do every assignment yourself, task by task', 'سوِّ كل أسايمنت بنفسك، تاسك تاسك')}</h1>
+    <ol class="gahow">
+      <li>${L('Open an assignment and read the scenario, tools and rules.', 'افتح الأسايمنت واقرأ السيناريو والأدوات والقواعد.')}</li>
+      <li>${L('Open the first task: read "What you must do" and "What it means", then follow the steps in your own file.', 'افتح أول تاسك: اقرأ "وش المطلوب" و"وش يعني"، ثم نفّذ الخطوات في ملفك.')}</li>
+      <li>${L('Take the screenshots listed (code too) and send them to Claude in the chat with the ready message.', 'صوّر اللقطات المطلوبة (حتى الكود) وأرسلها لـ Claude في المحادثة مع الرسالة الجاهزة.')}</li>
+      <li>${L('Claude checks them against the A criteria and tells you what is missing. Fix it, mark the task Done, then go to the next task.', 'Claude يراجعها على معايير A ويقولك وش ناقص. صحّحه، علّم التاسك "خلصته"، وانتقل للتاسك اللي بعده.')}</li>
+    </ol>
+    <p class="small muted">${L('Your grading criteria require your own work (no AI-generated content). Claude explains and reviews; you write and build everything yourself.', 'معايير التقييم تطلب عملك أنت (بدون محتوى مولّد بالذكاء الاصطناعي). Claude يشرح ويراجع، وأنت تكتب وتبني كل شيء بنفسك.')}</p>
+  </div></section>
+  <section class="grid3">${GAU.map(g => { const p = gaProg(g); return `<a class="card ucard" href="#ga-${g.id}"><span class="n">${esc(g.ga)} · UNIT ${g.num}</span><h2>${esc(g.title.en)}</h2>${S.lang !== 'en' ? '<p class="ar ttl-ar" lang="ar">' + esc(g.title.ar) + '</p>' : ''}${barH(100 * p.d / Math.max(1, p.n), p.d === p.n ? 's4' : '')}<span class="small muted">${p.d}/${p.n} ${L('tasks done', 'تاسكات خلصت')}</span></a>`; }).join('')}</section>`;
+}
+function viewGA(g) {
+  const si = Math.min(S.gaStep[g.id] || 0, g.tasks.length - 1), t = g.tasks[si], key = gaKey(g, si), st = S.gaSt[key] || 0, p = gaProg(g);
+  const msg = S.lang === 'en' ? g.ga + ' (Unit ' + g.num + ') – ' + t.n + ': ' + t.title.en + '. Here are my screenshots, please review them against the A criteria.' : g.ga + ' (الوحدة ' + g.num + ') – ' + t.n + ': ' + t.title.ar + '. هذي لقطاتي، راجعها على معايير A وقولي وش ناقص.';
+  return `<section class="gahead"><a href="#ga" class="btn quiet">← ${L('All assignments', 'كل الأسايمنتات')}</a><a href="#home" class="btn quiet">${L('Study site', 'موقع المذاكرة')}</a></section>
+  <section class="card stack"><span class="eyebrow">${esc(g.ga)} · ${L('Unit', 'الوحدة')} ${g.num}</span><h1>${esc(g.title.en)}</h1>${S.lang !== 'en' ? '<p class="ar ttl-ar" lang="ar" style="font-size:1.2rem;font-weight:600">' + esc(g.title.ar) + '</p>' : ''}
+    ${bi(g.scenario)}
+    <details class="gadet"><summary>${L('Tools, rules and file names', 'الأدوات والقواعد وأسماء الملفات')}</summary><div class="stack">${bi(g.tools)}<ul>${g.rules.map(r => '<li>' + bi(r) + '</li>').join('')}</ul><p class="small"><b>${L('Save as', 'احفظ باسم')}:</b> <span class="mono">${esc(g.file)}</span></p></div></details>
+    <div class="row" style="max-width:520px">${barH(100 * p.d / Math.max(1, p.n), p.d === p.n ? 's4' : '')}<span class="small" style="white-space:nowrap">${p.d}/${p.n} ${L('tasks done', 'تاسكات خلصت')}</span></div>
+  </section>
+  <div class="galayout">
+    <nav class="galist" aria-label="Tasks">${g.tasks.map((x, i) => `<button class="${i === si ? 'on' : ''}" data-gat="${i}"><span class="gs gs${S.gaSt[gaKey(g, i)] || 0}" title="${esc(T2(GST[S.gaSt[gaKey(g, i)] || 0][0], GST[S.gaSt[gaKey(g, i)] || 0][1]))}"></span><span class="tx"><b>${esc(x.n)}</b><span class="small">${L(x.title.en, x.title.ar)}</span></span></button>`).join('')}</nav>
+    <article class="card stack gatask" id="gatask">
+      <div class="row" style="justify-content:space-between"><span class="badge ub">${esc(t.n)}</span><span class="small muted">${L('Criteria', 'المعايير')} ${esc(t.crit)}</span></div>
+      <h2>${L(t.title.en, t.title.ar)}</h2>
+      <div class="gasec"><h3>📋 ${L('What you must do', 'وش المطلوب')}</h3>${bi(t.need)}</div>
+      <div class="gasec"><h3>💡 ${L('What it means', 'وش يعني')}</h3>${bi(t.explain)}</div>
+      <div class="gasec"><h3>🪜 ${L('Do it step by step', 'نفّذه خطوة بخطوة')}</h3><ol class="gasteps">${t.steps.map((s, k) => { const ck = S.gaChk[key + '-' + k]; return `<li class="${ck ? 'ck' : ''}"><label><input type="checkbox" data-gachk="${key}-${k}" ${ck ? 'checked' : ''}><span class="num">${k + 1}</span>${bi(s)}</label></li>`; }).join('')}</ol>
+        ${t.code ? `<p class="small muted">${L('Syntax pattern only. Write your own version for the assignment.', 'هذا نمط الصياغة فقط. اكتب نسختك أنت للأسايمنت.')}</p><div class="code"><div class="src"><pre>${hl(t.code, t.lang || 'text')}</pre></div></div>` : ''}</div>
+      <div class="gasec"><h3>📸 ${L('Screenshots to send me', 'اللقطات اللي ترسلها لي')}</h3><ul>${t.shots.map(s => '<li>' + bi(s) + '</li>').join('')}</ul></div>
+      <div class="gasec ga-a"><h3>🅰 ${L('To get an A', 'عشان تاخذ A')}</h3>${bi(t.a)}</div>
+      <div class="gasend"><b>${L('When you finish this task', 'لما تخلص هذا التاسك')}</b><p class="small">${L('Send your screenshots to Claude in the chat with this message:', 'أرسل لقطاتك لـ Claude في المحادثة مع هذي الرسالة:')}</p><div class="row"><span class="msg" id="gamsg">${esc(msg)}</span><button class="btn quiet" data-gacopy="1">${L('Copy', 'نسخ')}</button></div></div>
+      <div class="row"><span class="small muted">${L('Status', 'الحالة')}:</span>${GST.map((s, k) => `<button class="chip ${st === k ? 'on' : ''}" data-gast="${k}">${k === 3 ? '✓ ' : ''}${L(s[0], s[1])}</button>`).join('')}</div>
+      <div class="stack" style="gap:6px"><label class="small muted" for="ganote">${L('My notes and Claude\'s feedback', 'ملاحظاتي وملاحظات Claude')}</label><textarea class="notes" id="ganote" data-ganote="${key}" style="min-height:110px" placeholder="${esc(T2('e.g. Claude said: add the sequence diagram…', 'مثال: Claude قال أضيف مخطط التسلسل…'))}">${esc(S.gaNote[key] || '')}</textarea><span class="small muted" id="gaSaved"></span></div>
+      <div><button class="btn ghost" data-ask-ga="${key}">${L('Explain this task more simply (Claude)', 'اشرح لي هذا التاسك أبسط (Claude)')}</button></div>
+      <div class="ai" id="gai-${key}" hidden></div>
+      <div class="lsnnav"><button class="btn quiet" data-gat="${si - 1}" ${si === 0 ? 'disabled' : ''}>← ${L('Previous task', 'التاسك السابق')}</button>${si < g.tasks.length - 1 ? `<button class="btn" data-gat="${si + 1}">${L('Next task', 'التاسك التالي')} →</button>` : `<a class="btn" href="#ga">${L('All assignments', 'كل الأسايمنتات')}</a>`}</div>
+    </article>
+  </div>`;
+}
+async function askGA(btn) {
+  const key = btn.dataset.askGa, m = /^(u\d+)-g(\d+)$/.exec(key); if (!m || !GAD[m[1]]) return;
+  const g = GAD[m[1]], t = g.tasks[+m[2]], box = document.getElementById('gai-' + key);
+  box.hidden = false; box.textContent = T2('Thinking…', 'جاري التفكير…'); btn.disabled = true;
+  let sample = null;
+  try { sample = window.claude && window.claude.use ? await window.claude.use('sample') : null; } catch (e) { sample = null; }
+  if (!sample) { box.textContent = T2('Claude is not available in this view. Ask in the chat instead.', 'Claude غير متاح هنا. اسأل في المحادثة.'); btn.disabled = false; return; }
+  const prompt = 'You are a patient tutor for a Saudi diploma student in software development. Explain the assignment task below in a simpler way so the student can do it HERSELF.\n' +
+    'Rules: do NOT write the deliverable or any answer she could copy; explain what the task really asks, give a tiny example from a DIFFERENT topic, list 3 common mistakes, and a short A-grade checklist.\n' +
+    'Write two parts: English first (max 140 words), then Arabic (max 140 words). Plain text only, no markdown.\n\n' +
+    'Assignment: ' + g.ga + ' Unit ' + g.num + ' – ' + g.title.en + '\nTask: ' + t.n + ' ' + t.title.en + '\nRequired: ' + t.need.en + '\nA criterion: ' + t.a.en;
+  try { const res = await sample(prompt, { onText: u => { box.textContent = u.text; } }); box.textContent = res.text; }
+  catch (e) { box.textContent = e && e.code === 'rate_limited' ? T2('Too many requests. Try again in a minute.', 'طلبات كثيرة. حاول بعد دقيقة.') : T2('Could not get an answer right now.', 'ما قدرت أجيب إجابة الحين.'); }
+  btn.disabled = false;
+}
 
 /* ---------------- hands-on activities ---------------- */
 const ATYPE = { sort: ['Sort it', 'صنّف'], order: ['Put in order', 'رتّب'], blank: ['Fill the blank', 'أكمل الفراغ'], pick: ['Scenario', 'سيناريو تطبيقي'] };
@@ -1602,6 +1713,10 @@ document.addEventListener('click', e => {
   if (d.pm) { P.mode = d.pm; render(false); return; }
   if (d.pl !== undefined) { P.level = +d.pl; render(false); return; }
   if (d.watch) { const r = topicRef(d.watch); if (!r) return; VID.startTopic = r.i; UT.tab = 'video'; render(); return; }
+  if (d.gat !== undefined) { const gid = route().slice(3); if (!GAD[gid]) return; S.gaStep[gid] = Math.max(0, +d.gat); persist(false); render(false); const el = $('#gatask'); if (el) window.scrollTo({ top: Math.max(0, el.getBoundingClientRect().top + window.scrollY - 90), behavior: 'smooth' }); return; }
+  if (d.gast !== undefined) { const gid = route().slice(3), g = GAU.find(x => x.id === gid); if (!g) return; const k = gaKey(g, Math.min(S.gaStep[gid] || 0, g.tasks.length - 1)), v = +d.gast; if (v === 3 && S.gaSt[k] !== 3) { addXP(30); confetti(); } S.gaSt[k] = v; persist(); render(false); return; }
+  if (d.gacopy) { const txt = ($('#gamsg') || {}).textContent || ''; const p = navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(txt) : Promise.reject(); p.then(() => toast(T2('Message copied. Paste it in the chat with your screenshots.', 'تم نسخ الرسالة. الصقها في المحادثة مع لقطاتك.')), () => { const rg = document.createRange(); rg.selectNodeContents($('#gamsg')); const sl = getSelection(); sl.removeAllRanges(); sl.addRange(rg); toast(T2('Message selected. Press Ctrl+C to copy.', 'تم تحديد الرسالة. اضغط Ctrl+C للنسخ.')); }); return; }
+  if (d.askGa) { askGA(b); return; }
   if (d.apply) { const r = topicRef(d.apply), box = document.getElementById('apply-' + d.apply); if (!r || !box) return; box.hidden = !box.hidden; if (!box.hidden && !box.childElementCount) { const list = actsFor(r.u, r.i); box.innerHTML = list.map((_, k) => '<div id="ap-' + d.apply + '-' + k + '"></div>').join(''); list.forEach((x, k) => mountAct(document.getElementById('ap-' + d.apply + '-' + k), r.u, x.a, x.key)); } return; }
   if (d.more) { const m = document.getElementById('more-' + d.more); m.hidden = !m.hidden; b.innerHTML = m.hidden ? L('Explain more', 'اشرح أكثر') : L('Hide', 'إخفاء'); return; }
   if (d.say) { say(b); return; }
@@ -1641,6 +1756,7 @@ document.addEventListener('click', e => {
 document.addEventListener('change', e => {
   const t = e.target;
   if (t.dataset.plan) { if (t.checked) { S.plan[t.dataset.plan] = 1; addXP(5); } else { delete S.plan[t.dataset.plan]; addXP(-5); } persist(); render(false); return; }
+  if (t.dataset.gachk) { if (t.checked) S.gaChk[t.dataset.gachk] = 1; else delete S.gaChk[t.dataset.gachk]; persist(); const li = t.closest('li'); if (li) li.classList.toggle('ck', t.checked); return; }
   if (t.dataset.tp) { if (t.checked) { S.tp[t.dataset.tp] = 1; addXP(6); } else { delete S.tp[t.dataset.tp]; addXP(-6); } persist(); return; }
   if (t.id === 'startDate' && t.value) { S.start = t.value; persist(false); render(false); return; }
   if (t.id === 'examDate' && t.value) { S.examDate = t.value; persist(false); render(false); }
@@ -1648,6 +1764,7 @@ document.addEventListener('change', e => {
 document.addEventListener('input', e => {
   const t = e.target;
   if (t.id === 'kwSearch') searchKw(t.value);
+  if (t.dataset && t.dataset.ganote) { S.gaNote[t.dataset.ganote] = t.value; clearTimeout(noteT); noteT = setTimeout(() => { persist(false); const s = $('#gaSaved'); if (s) s.textContent = T2('Saved', 'تم الحفظ'); }, 700); }
   if (t.dataset && t.dataset.notes) { S.notes[t.dataset.notes] = t.value; clearTimeout(noteT); noteT = setTimeout(() => { persist(); const s = $('#noteSaved'); if (s) s.textContent = T2('Saved', 'تم الحفظ'); }, 700); }
 });
 document.addEventListener('keydown', e => {
